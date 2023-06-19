@@ -11,18 +11,23 @@ import{ Ecommerce, Orders, Calendar,Employees, Stacked, Pyramid, Customers, Kanb
 import { useStateContext } from "./contexts/ContextProvider";
 
 const App = () => {
-  const {activeMenu} = useStateContext();   
+  const {activeMenu, themeSettings, setThemeSettings,
+    currentColor, currentMode} = useStateContext();   
   return (
+    <div className={currentMode === 'Dark'?'dark': ' '}>
     <BrowserRouter>
       <div className="flex relative dark:bg-main-dark-bg">
         <div className="fixed right-4 bottom-4" style={{zindex:'1000'}}>
           <TooltipComponent content="Settings" position="Top">
           
           <button type="button"
-          className="text-3xl p-3,
+          className="text-3xl p-4,
           hover:drop-shadow-xl,
           hover:bg-light-gray text-white"
-          style={{background:'blue',
+
+          // use for open and close setting buttons
+          onClick={()=> setThemeSettings(true)}
+          style={{background: currentColor,
           borderRadius:'50%'}}>
             <TbFileSettings />
           </button>
@@ -48,18 +53,21 @@ const App = () => {
           <div className="fixed md:static
           bg-main-bg dark:bg-main-dark-bg navbar 
           w-full">
-              <Navbar/>
+           <Navbar/>
           </div>
-        </div>
-
         <div>
+        {themeSettings && <ThemeSettings/>}
+
           <Routes>
             {/* Dashboard */}
-            <Route path="/" element={<Ecommerce/>}/> 
-            <Route path="/ecommerce" element={<Ecommerce />}/>
+            <Route path="/ecommerce" element={<Ecommerce/>}/> 
+            <Route path="/ecommerce" element=
+            {<Ecommerce />}/>
 
             {/*Pages */}
             <Route path="/orders" element={<Orders/>}/> 
+            <Route path="/employees" element={<Employees/>}/> 
+            <Route path="/customers" element={<Customers/>}/> 
 
             {/* Apps */}
             <Route path="/Kanban" element={<Kanban />}/> 
@@ -69,7 +77,7 @@ const App = () => {
             
             {/* Charts */}
             <Route path="/Line" element={<Line/>}/> 
-            <Route path="/area" element={<ColorPicker/>}/> 
+            <Route path="/area" element={<Area/>}/> 
             <Route path="/bar" element={<Bar/>}/> 
             <Route path="/pie" element={<Pie />}/> 
             <Route path="/financial" element={<Financial />}/> 
@@ -80,10 +88,12 @@ const App = () => {
 
 
           </Routes>
-        </div>
 
+        </div>
+        </div>
       </div>
     </BrowserRouter>
+    </div>
   );
 };
 
